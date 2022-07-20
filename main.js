@@ -1,9 +1,8 @@
 const request = require('request');
 const axios = require('axios');
 const json = require('json');
+var lodash = require('lodash');
 const regex = new RegExp("(.*)T", 'gm')
-const str = `2022-07-19T19:58:40.000Z`;
-let m;
 const API_TOKEN =
 
   const config = {
@@ -13,34 +12,56 @@ const API_TOKEN =
   };
 var subtotal_list = []
 var shipping_list = []
-// for (let x = 0; x < 10; x++) {
-//   let values = main(x);
-//   console.log('RUNNTING');
-// }
+
 //paid at
-let values = main(1, '2022-07-19');
+// let values = main(1, );
 
 function main(page, date) {
-  axios
-    // search 150 Pages Max 100
-    .get('https://app.uprightlabs.com/api/orders?page=' + page + '&per_page=40&sort=ordered_at.desc', config)
-    .then(res => {
-      //  var test = JSON.parse(res)
-      var data = res['data']['orders']
-      // console.log(data['id']);
-      for (let i = 0; i < data.length; i++) {
-        var list = data[i]
+  return new Promise((resolve, reject) => {
+    const url = 'https://app.uprightlabs.com/api/orders?page=' + page + '&per_page=40&sort=ordered_at.desc'
+    axios
+      // search 150 Pages Max 100
+      .get(url, config)
 
-        if (list['paid_at'].includes(date)) {
-          console.log('YES');
-        } else {
-          console.log('NO');
+      .then(res => {
+        // console.log(page);
+        //  var test = JSON.parse(res)
+        var data = res['data']['orders']
+        // console.log(data['id']);
+        for (let i = 0; i < data.length; i++) {
+          var list = data[i]
+
+          if (list['paid_at'].includes(date)) {
+            subtotal_list.push(parseInt(list['subtotal']))
+            // console.log(list['subtotal']);
+          }
+
+          // console.log(list['paid_at']);
+          // shipping_list.push(list['shipping_total'])
+
         }
-        subtotal_list.push(list['subtotal'])
-        // console.log(list['paid_at']);
-        // shipping_list.push(list['shipping_total'])
-      }
-      // console.log(shipping_list);
-      // console.log(subtotal_list);
-    })
+        var sum = subtotal_list.reduce(function(a, b) {
+          return a + b;
+        }, 0);
+        var total_sales = sum
+        if (page = 7) {
+          console.log(subtotal_list);
+        }
+        // console.log(total_sales);
+        resolve(total_sales)
+        // console.log(shipping_list);
+        // console.log(subtotal_list);
+      })
+  })
 };
+var data_list = []
+async function data(p) {
+
+  //3. Await for the first function to complete
+  const result = await main(p, '2022-07-20')
+  // console.log(result);
+};
+// data(8)
+for (let x = 6; x < 8; x++) {
+  let values = data(x);
+}
