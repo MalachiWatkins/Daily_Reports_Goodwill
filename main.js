@@ -10,10 +10,7 @@ const config = {
   }
 };
 
-// So since this is async its really hard for my brain to understand but i think  i worked out a soluition
-// so just the responce is async so if i create a way to generate the responce and pass is to a non async function
-// this should fix all the issues im having right now
-
+// // TODO: Clean  up code, start next listing section
 async function url() {
   var i = 1;
   let res_list = [];
@@ -47,6 +44,7 @@ async function parse(date) {
   var x = 0;
   let subtotal = []
   let shipping = []
+  let shipped_orders = []
   while (x < response.length) {
     var singel_res = response[x]
     var single_data = singel_res['data']
@@ -54,9 +52,14 @@ async function parse(date) {
       var order = single_data['orders']
       var single_order = order[i]
 
+
       var paid_at = single_order['paid_at']
       try {
         if (paid_at.includes(date)) {
+          if (single_order['shipped_at'] != null) {
+            shipped_orders.push(single_order['shipped_at'])
+          }
+
           var market = single_order['market_name']
           var ship_total = single_order['shipping_total']
           var ship_dict = {}
@@ -82,7 +85,7 @@ async function parse(date) {
     x++
   }
   return new Promise((resolve, reject) => {
-    var nested_data = [subtotal, shipping]
+    var nested_data = [subtotal, shipping, shipped_orders]
     resolve(nested_data) // data here is nested and the subtotals have store numbers as keys ex: {store_num: {sgw: '10.99'}}
   });
 
@@ -95,7 +98,7 @@ async function sales_data() {
   var sub_price = []
   var sgw_sub_price = []
   var ebay_sub_price = []
-
+  var shipped_order = data[2]
   var shipping = data[1]
   var ship_price = []
   shipping.forEach((single_shipping) => {
@@ -122,6 +125,7 @@ async function sales_data() {
 
   });
 
+
   var sum = sub_price.reduce(function(a, b) {
     return a + b;
   }, 0);
@@ -146,6 +150,7 @@ async function sales_data() {
   var ppl = total_sales / items_sold
   var roundedppl = ppl.toFixed(2);
   // ONCE DONE CREATE A PROMISE HERE FOR AUTO FILL FUNCTION
+  console.log('Shipped Orders: ' + shipped_order.length);
   console.log('Total Sales: ' + total_sales.toFixed(2));
   console.log('Ebay Sales: ' + total_ebay.toFixed(2));
   console.log('SGW Sales: ' + total_sgw.toFixed(2));
