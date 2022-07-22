@@ -17,8 +17,9 @@ const config = {
 async function url() {
   var i = 1;
   let res_list = [];
-  while (i < 5) {
-    const url = 'https://app.uprightlabs.com/api/orders?page=' + i.toString() + '&per_page=5&sort=ordered_at.desc'
+  while (i < 60) {
+
+    const url = 'https://app.uprightlabs.com/api/orders?page=' + i.toString() + '&per_page=40&sort=ordered_at.desc'
     const result = await data(url)
     res_list.push(result)
     i++
@@ -53,30 +54,81 @@ async function parse(date) {
       var order = single_data['orders']
       var single_order = order[i]
 
-      if (single_order['paid_at'].includes(date)) {
-        var market = single_order['market_name']
-        // shipping total can stay the way it is but the total need to chance and the store number needs to be attached so itterate down one  in the dictuonary
-        var ship_total = single_order['shipping_total']
-        var ship_dict = {}
-        ship_dict[market] = ship_total;
-        shipping.push(ship_dict)
-        single_order['order_items'].forEach((item, i) => {
-          var order_dict = {};
-          var store_number_order_dict = {};
-          order_dict[market] = item['total'];
-          store_number_order_dict[item['store_name']] = order_dict;
-          subtotal.push(store_number_order_dict)
+      var paid_at = single_order['paid_at']
+      try {
+        if (paid_at.includes(date)) {
+          var market = single_order['market_name']
+          var ship_total = single_order['shipping_total']
+          var ship_dict = {}
+          ship_dict[market] = ship_total;
+          shipping.push(ship_dict)
+          single_order['order_items'].forEach((item, i) => {
 
-        });
-
-
-
+            var order_dict = {};
+            var store_number_order_dict = {};
+            order_dict[market] = item['total'];
+            store_number_order_dict[item['store_name']] = order_dict;
+            subtotal.push(store_number_order_dict)
+          });
+        }
+      } catch (e) {
+        var n = 'null'
+      } finally {
+        var n = 'null'
       }
+
     }
 
     x++
   }
-  console.log(subtotal);
-  console.log(shipping);
+  return new Promise((resolve, reject) => {
+    var nested_data = [subtotal, shipping]
+    resolve(nested_data)
+  });
+  // console.log(subtotal.length);
+  // console.log(shipping);
 }
-parse('2022-07-21')
+
+
+async function sales_data() {
+  const data = await parse('2022-07-21')
+  var subtotal = data[0]
+  var sub_price = []
+  var shipping = data[1]
+  var ship_price = []
+  shipping.forEach((single_shipping) => {
+    for (var key in single_shipping) {
+      ship_price.push(parseInt(single_shipping[key]))
+    }
+  });
+
+  // Totals
+  subtotal.forEach((store) => {
+    for (var key in store) {
+      var price = store[key];
+      for (var key in price) {
+        sub_price.push(parseInt(price[key]))
+      }
+    }
+
+  });
+  var sum = sub_price.reduce(function(a, b) {
+    return a + b;
+  }, 0);
+  var total_sales = sum
+
+
+  var sum_shipping = ship_price.reduce(function(a, b) {
+    return a + b;
+  }, 0);
+  var total_shipping = sum_shipping
+  var items_sold = subtotal.length
+  var ppl = total_sales / items_sold
+  var roundedppl = ppl.toFixed(1);
+  console.log('Total Sales: ' + total_sales);
+  console.log('Total Shipping Revenue: ' + total_shipping);
+  console.log('Items Sold: ' + items_sold);
+  console.log('Daily PPL: ' + roundedppl);
+
+}
+sales_data()
