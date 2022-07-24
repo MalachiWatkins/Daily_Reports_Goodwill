@@ -14,9 +14,10 @@ const config = {
 // // TODO: Clean  up code, start next listing section
 
 // url search
-let max_page = 3
+let max_page = 3 // max page
+var page_start = 1; // Page Start
 async function url() {
-  var page_start = 1; // Page Start
+
   let res_list = []; // Response List
   while (page_start < max_page) {
     const url = 'https://app.uprightlabs.com/api/orders?page=' + page_start.toString() + '&per_page=40&sort=ordered_at.desc'
