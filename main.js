@@ -3,7 +3,10 @@ const axios = require('axios');
 const json = require('json');
 var lodash = require('lodash');
 const API_TOKEN = ''
-
+var max_page = 50 // max page
+var page_start = 1; // Page Start
+const order_url = 'https://app.uprightlabs.com/api/orders?page=' + page_start.toString() + '&per_page=40&sort=ordered_at.desc'
+const listing_url = 'https://app.uprightlabs.com/api/reports/productivity/user?time_start=2022-07-18&time_end=2022-07-18&hide_inactive_users=true'
 // Headers Config
 const config = {
   headers: {
@@ -14,13 +17,10 @@ const config = {
 // // TODO: Clean  up code, start next listing section
 
 // url search
-let max_page = 3 // max page
-var page_start = 1; // Page Start
-async function url() {
+async function url_response(url) {
 
   let res_list = []; // Response List
   while (page_start < max_page) {
-    const url = 'https://app.uprightlabs.com/api/orders?page=' + page_start.toString() + '&per_page=40&sort=ordered_at.desc'
     const result = await data(url)
     res_list.push(result)
     page_start++
@@ -41,8 +41,8 @@ function data(url) {
   });
 }
 
-async function parse(date) {
-  const response = await url()
+async function parse(date, url) {
+  const response = await url_response(url)
   var x = 0;
   let subtotal = []
   let shipping = []
@@ -57,6 +57,7 @@ async function parse(date) {
       try {
         if (paid_at.includes(date)) {
           if (single_order['shipped_at'] != null) {
+            console.log(single_order['shipped_at']);
             shipped_orders.push(single_order['shipped_at'])
           }
           var market = single_order['market_name']
@@ -85,9 +86,8 @@ async function parse(date) {
     resolve(nested_data) // data here is nested and the subtotals have store numbers as keys ex: {store_num: {sgw: '10.99'}}
   });
 }
-
-async function sales_data() {
-  const data = await parse('2022-07-22')
+async function sales_data(date, url) {
+  const data = await parse(date, url)
   var subtotal = data[0]
   var sub_price = []
   var sgw_sub_price = []
@@ -117,9 +117,10 @@ async function sales_data() {
   var total_shipping = lodash.sum(ship_price);
   var total_sgw = lodash.sum(sgw_sub_price);
   var total_ebay = lodash.sum(ebay_sub_price);
+  var ppl = total_sales / items_sold
   var roundedppl = ppl.toFixed(2);
   var items_sold = subtotal.length
-  var ppl = total_sales / items_sold
+
 
   // ONCE DONE CREATE A PROMISE HERE FOR AUTO FILL FUNCTION
   console.log('Shipped Orders: ' + shipped_order.length);
@@ -133,4 +134,36 @@ async function sales_data() {
 }
 // This is for [Shipped Orders, Total Sales, Ebay/sgw sales, Shipping rev, Items sold, daily ppl] *daily only
 
-sales_data()
+
+async function listing(url) {
+  return new Promise((resolve, reject) => {
+    var list = []
+    axios
+      .get(url, config)
+      .then(res => {
+        var url_data = res['data']
+        url_data['data'].forEach((item, i) => {
+          list.push(item['posted'])
+        });
+        var daily_postings = lodash.sum(list)
+        var avg_posting_per_lister = daily_postings / 5
+        console.log('Daily Postings: ' + daily_postings);
+        console.log('Avg Posting/Lister: ' + avg_posting_per_lister);
+        resolve(res)
+      });
+  });
+
+
+}
+listing(listing_url);
+sales_data('2022-07-18', order_url)
+// This is what pops up now NEEDS fixed its with the sales _data function IDK whats goin on
+// Daily Postings: 320
+// Avg Posting/Lister: 64
+// Shipped Orders: 0
+// Total Sales: 0.00
+// Ebay Sales: 0.00
+// SGW Sales: 0.00
+// Total Shipping Revenue: 0.00
+// Items Sold: 0.00
+// Daily PPL: NaN
