@@ -14,7 +14,7 @@ const config = {
 async function url() {
   var i = 1;
   let res_list = [];
-  while (i < 3) {
+  while (i < 10) {
 
     const url = 'https://app.uprightlabs.com/api/orders?page=' + i.toString() + '&per_page=40&sort=ordered_at.desc'
     const result = await data(url)
@@ -46,6 +46,7 @@ async function parse(date) {
   let shipping = []
   let shipped_orders = []
   while (x < response.length) {
+
     var singel_res = response[x]
     var single_data = singel_res['data']
     for (var i = 0; i < single_data['orders'].length; i++) {
@@ -93,12 +94,13 @@ async function parse(date) {
 
 
 async function sales_data() {
-  const data = await parse('2022-07-22')
+  const data = await parse('2022-07-25')
   var subtotal = data[0]
   var sub_price = []
   var sgw_sub_price = []
   var ebay_sub_price = []
   var shipped_order = data[2]
+  console.log(shipped_order);
   var shipping = data[1]
   var ship_price = []
   shipping.forEach((single_shipping) => {
@@ -150,6 +152,7 @@ async function sales_data() {
   var ppl = total_sales / items_sold
   var roundedppl = ppl.toFixed(2);
   // ONCE DONE CREATE A PROMISE HERE FOR AUTO FILL FUNCTION
+  console.log('---------------------------- Daily ------------------------');
   console.log('Shipped Orders: ' + shipped_order.length);
   console.log('Total Sales: ' + total_sales.toFixed(2));
   console.log('Ebay Sales: ' + total_ebay.toFixed(2));
@@ -157,6 +160,8 @@ async function sales_data() {
   console.log('Total Shipping Revenue: ' + total_shipping.toFixed(2));
   console.log('Items Sold: ' + items_sold.toFixed(2));
   console.log('Daily PPL: ' + roundedppl);
+  console.log('------------------------------------------------------------');
+
 
 }
 sales_data()
