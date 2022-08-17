@@ -3,165 +3,34 @@ const axios = require('axios');
 const json = require('json');
 var lodash = require('lodash');
 const API_TOKEN = ''
-// test
+// SOMETHING IS DOUBLEING FIND AND FIX
 const config = {
   headers: {
     'X-Authorization': API_TOKEN,
   }
 };
-
-// // TODO: Clean  up code, start next listing section
-async function url() {
-  var i = 1;
-  let res_list = [];
-  while (i < 10) {
-
-    const url = 'https://app.uprightlabs.com/api/orders?page=' + i.toString() + '&per_page=40&sort=ordered_at.desc'
-    const result = await data(url)
-    res_list.push(result)
-    i++
-  }
-  return new Promise((resolve, reject) => {
-    resolve(res_list)
-  });
-
-}
+var start_day = '2022-08-15'
+var end_day = '2022-08-16'
+let order_url = 'https://app.uprightlabs.com/api/reports/order_items?time_start=' + start_day + 'T05:00:00.247Z&time_end=' + end_day + 'T05:00:59.247Z'
 
 function data(url) {
   return new Promise((resolve, reject) => {
     axios
-      // search 150 Pages Max 100
       .get(url, config)
-
       .then(res => {
         resolve(res)
       });
   });
 }
 
-async function parse(date) {
-  const response = await url()
-  var x = 0;
-  let subtotal = []
-  let shipping = []
-  let shipped_orders = []
-  while (x < response.length) {
-
-    var singel_res = response[x]
-    var single_data = singel_res['data']
-    for (var i = 0; i < single_data['orders'].length; i++) {
-      var order = single_data['orders']
-      var single_order = order[i]
-
-
-      var paid_at = single_order['paid_at']
-      try {
-        if (paid_at.includes(date)) {
-          if (single_order['shipped_at'] != null) {
-            shipped_orders.push(single_order['shipped_at'])
-          }
-
-          var market = single_order['market_name']
-          var ship_total = single_order['shipping_total']
-          var ship_dict = {}
-          ship_dict[market] = ship_total;
-          shipping.push(ship_dict)
-          single_order['order_items'].forEach((item, i) => {
-
-            var order_dict = {};
-            var store_number_order_dict = {};
-            order_dict[String(market)] = item['total'];
-            store_number_order_dict[item['store_name']] = order_dict;
-            subtotal.push(store_number_order_dict)
-          });
-        }
-      } catch (e) {
-        var n = 'null'
-      } finally {
-        var n = 'null'
-      }
-
-    }
-
-    x++
-  }
-  return new Promise((resolve, reject) => {
-    var nested_data = [subtotal, shipping, shipped_orders]
-    resolve(nested_data) // data here is nested and the subtotals have store numbers as keys ex: {store_num: {sgw: '10.99'}}
+async function parse() {
+  const response = await data(order_url)
+  response['data']['data'].forEach((order) => {
+    console.log(order);
   });
 
 }
-
-
-async function sales_data() {
-  const data = await parse('2022-07-25')
-  var subtotal = data[0]
-  var sub_price = []
-  var sgw_sub_price = []
-  var ebay_sub_price = []
-  var shipped_order = data[2]
-  console.log(shipped_order);
-  var shipping = data[1]
-  var ship_price = []
-  shipping.forEach((single_shipping) => {
-    for (var key in single_shipping) {
-      ship_price.push(parseFloat(single_shipping[key]))
-    }
-  });
-
-  // Totals
-  subtotal.forEach((store) => {
-    for (var key in store) {
-      var price = store[key];
-      // console.log(price);
-      if (price['shopgoodwill']) {
-        sgw_sub_price.push(parseFloat(price['shopgoodwill']))
-      } else {
-        ebay_sub_price.push(parseFloat(price['ebay']))
-      }
-      for (var key in price) {
-
-        sub_price.push(parseFloat(price[key]))
-      }
-    }
-
-  });
-
-
-  var sum = sub_price.reduce(function(a, b) {
-    return a + b;
-  }, 0);
-  var total_sales = sum
-
-  var sum_shipping = ship_price.reduce(function(a, b) {
-    return a + b;
-  }, 0);
-  var total_shipping = sum_shipping
-
-  var sgw_sum = sgw_sub_price.reduce(function(a, b) {
-    return a + b;
-  }, 0);
-  var total_sgw = sgw_sum
-
-  var ebay_sum = ebay_sub_price.reduce(function(a, b) {
-    return a + b;
-  }, 0);
-  var total_ebay = ebay_sum
-
-  var items_sold = subtotal.length
-  var ppl = total_sales / items_sold
-  var roundedppl = ppl.toFixed(2);
-  // ONCE DONE CREATE A PROMISE HERE FOR AUTO FILL FUNCTION
-  console.log('---------------------------- Daily ------------------------');
-  console.log('Shipped Orders: ' + shipped_order.length);
-  console.log('Total Sales: ' + total_sales.toFixed(2));
-  console.log('Ebay Sales: ' + total_ebay.toFixed(2));
-  console.log('SGW Sales: ' + total_sgw.toFixed(2));
-  console.log('Total Shipping Revenue: ' + total_shipping.toFixed(2));
-  console.log('Items Sold: ' + items_sold.toFixed(2));
-  console.log('Daily PPL: ' + roundedppl);
-  console.log('------------------------------------------------------------');
-
-
-}
-sales_data()
+parse()
+const listing_url = 'https://app.uprightlabs.com/api/reports/productivity/user?time_start=2022-07-18&time_end=2022-07-18&hide_inactive_users=true'
+const url_t = 'https://app.uprightlabs.com/api/reports/paid_orders?time_start=2022-06-01T00:00:00.247Z&time_end=2022-06-01T23:30:13.247Z%27&payment_status=PAID'
+// listing(url_t)
