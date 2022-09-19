@@ -1,0 +1,83 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing">
+    <s:Header>
+        <a:Action s:mustUnderstand="1">http://tempuri.org/IAuctionReportDataProvider/Activity</a:Action>
+        <a:MessageID>urn:uuid:0752d4de-bd45-41d2-991b-6855f8ea7ee1</a:MessageID>
+        <a:ReplyTo>
+            <a:Address>http://www.w3.org/2005/08/addressing/anonymous</a:Address>
+        </a:ReplyTo>
+        <a:To s:mustUnderstand="1">https://desktopbridge.neatoscan.com/API/api_025/AuctionReportData.svc</a:To>
+    </s:Header>
+    <s:Body>
+        <Activity xmlns="http://tempuri.org/">
+            <token xmlns:b="http://schemas.datacontract.org/2004/07/Neato.WCF.Core"
+                xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <b:ClientID />
+                <b:ClientUserName></b:ClientUserName>
+                <b:DeviceID />
+                <b:Expires></b:Expires>
+                <b:HasBeenAuthenticated>true</b:HasBeenAuthenticated>
+                <b:Info>
+                    <b:AppModulesInstalled />
+                    <b:AssignedBuildingID>19</b:AssignedBuildingID>
+                    <b:DateLastUpdated />
+                    <b:Email i:nil="true" />
+                    <b:EnabledMarketplaceTypes xmlns:c="http://schemas.datacontract.org/2004/07/NeatoBusiness.Common">
+                        <c:MarketplaceTypes>AmazonUS</c:MarketplaceTypes>
+                        <c:MarketplaceTypes>eBay</c:MarketplaceTypes>
+                        <c:MarketplaceTypes>Alibris</c:MarketplaceTypes>
+                        <c:MarketplaceTypes>ShopGoodWill</c:MarketplaceTypes>
+                        <c:MarketplaceTypes>eBayAuction</c:MarketplaceTypes>
+                        <c:MarketplaceTypes>GoodwillBooks</c:MarketplaceTypes>
+                    </b:EnabledMarketplaceTypes>
+                    <b:MinimumRequiredVersionAndroid>
+                        <b:HasValue>false</b:HasValue>
+                        <b:_Value i:nil="true" />
+                    </b:MinimumRequiredVersionAndroid>
+                    <b:MinimumRequiredVersionWindows>
+                        <b:HasValue>false</b:HasValue>
+                        <b:_Value i:nil="true" />
+                    </b:MinimumRequiredVersionWindows>
+                    <b:Password />
+                    <b:SessionGuid></b:SessionGuid>
+                    <b:UserName />
+                    <b:UserPermissions>
+                        <b:HasValue>false</b:HasValue>
+                        <b:_Value i:nil="true" xmlns:c="http://schemas.datacontract.org/2004/07/NeatoBusiness.Common" />
+                    </b:UserPermissions>
+                </b:Info>
+                <b:Marketplaces>
+                    <b:Marketplace z:Id="i2" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
+                        <b:HasChanges>false</b:HasChanges>
+                        <b:Enabled>true</b:Enabled>
+                        <b:IsSandbox>false</b:IsSandbox>
+                        <b:MarketplaceType>eBay</b:MarketplaceType>
+                        <b:OrderDate>2022-09-08T14:15:06</b:OrderDate>
+                        <b:UserName></b:UserName>
+                    </b:Marketplace>
+                    <b:Marketplace z:Id="i23" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
+                        <b:HasChanges>false</b:HasChanges>
+                        <b:Enabled>true</b:Enabled>
+                        <b:IsSandbox>false</b:IsSandbox>
+                        <b:MarketplaceType>ShopGoodWill</b:MarketplaceType>
+                        <b:OrderDate>2022-09-08T17:13:36</b:OrderDate>
+                        <b:UserName></b:UserName>
+                    </b:Marketplace>
+                    <b:Marketplace z:Id="i24" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
+                        <b:HasChanges>false</b:HasChanges>
+                        <b:Enabled>true</b:Enabled>
+                        <b:IsSandbox>false</b:IsSandbox>
+                        <b:MarketplaceType>eBayAuction</b:MarketplaceType>
+                        <b:OrderDate>2022-09-08T17:13:44</b:OrderDate>
+                        <b:UserName></b:UserName>
+                    </b:Marketplace>
+                </b:Marketplaces>
+                <b:NeatoTokenID></b:NeatoTokenID>
+                <b:Password xmlns:c="http://schemas.datacontract.org/2004/07/System.Security" />
+                <b:UnsecurePassword></b:UnsecurePassword>
+                <b:UserName></b:UserName>
+            </token>
+            <start></start>
+            <end></end>
+        </Activity>
+    </s:Body>
+</s:Envelope>

@@ -1,0 +1,14 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:a="http://www.w3.org/2005/08/addressing">
+    <s:Header>
+        <a:Action s:mustUnderstand="1">http://tempuri.org/IAuctionReportDataProvider/Authenticate</a:Action>
+        <a:To s:mustUnderstand="1">https://desktopbridge.neatoscan.com/API/api_025/AuctionReportData.svc</a:To>
+    </s:Header>
+    <s:Body>
+        <Authenticate xmlns="http://tempuri.org/">
+            <username></username>
+            <clientUsername></clientUsername>
+            <password></password>
+        </Authenticate>
+    </s:Body>
+</s:Envelope>

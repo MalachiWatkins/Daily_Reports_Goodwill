@@ -1,4 +1,7 @@
 # Logs
+UPRIGHT LABS/
+Resources/
+NeatoScan/config.js
 logs
 *.log
 npm-debug.log*
