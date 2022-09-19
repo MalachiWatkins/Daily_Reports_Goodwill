@@ -22,27 +22,41 @@ const soapRequest = require('easy-soap-request');
 var fs = require('fs'),
     parseString = require("xml2js").parseString,
     xml2js = require("xml2js");
+<<<<<<< HEAD
 const { JSDOM } = require("jsdom");
 const { window } = new JSDOM();
 var start = window.performance.now();
+=======
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
 
 // XML File Locations Put this in config file
 var Request_Auction_Order = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/Auction_order.xml'
 //'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/Auction_order.xml'
 var Request_Auction_Inv = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_inventory.xml'
 //'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_inventory.xml'
+<<<<<<< HEAD
 var Authenticate_xml = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_auth.xml'
 //'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_auth.xml'
 var Request_Auction_Activity = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_activity.xml'
 var Request_Auction_Container_details = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_container_details.xml'
 var Request_Auction_Refunds = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_refunds.xml'
                                                                                                              
+=======
+//
+
+var Authenticate_xml = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_auth.xml'
+//'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_auth.xml'
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
 
 
 const url_auctions = SOAP_urls['Auction_Url']; // Main Book URL
 
 
+<<<<<<< HEAD
 // Auth Function
+=======
+// Request Function
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
 async function AuctionreqAuth(url, xml, CL, type) {
     const USER_Headers = {
         headers: {
@@ -75,13 +89,22 @@ async function AuctionreqAuth(url, xml, CL, type) {
 
                     });
                 }
+<<<<<<< HEAD
             });
+=======
+
+            });
+
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
         }).catch(err => {
             console.log(err)
         });
     });
 }
+<<<<<<< HEAD
 // Parses Auth Response Into Authentication Package
+=======
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
 async function authFIleparse() {
     return new Promise((resolve, reject) => {
         fs.readFile(Authenticate_xml, "utf-8", function (err, data) {
@@ -94,7 +117,10 @@ async function authFIleparse() {
                 var builder = new xml2js.Builder();
                 const xml = builder.buildObject(json);
                 const auth_response = await AuctionreqAuth(url_auctions, xml, 'Auctions_Report_Content_Len', 'auth')
+<<<<<<< HEAD
                 console.log('Authenticated!');
+=======
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
                 resolve(auth_response);
             });
 
@@ -102,6 +128,7 @@ async function authFIleparse() {
     });
 }
 
+<<<<<<< HEAD
 // // authFIleparse()
 // async function main_auth() {
 //     const authentication_package = await authFIleparse()
@@ -109,6 +136,14 @@ async function authFIleparse() {
 // }
 
 // Adds Authentication to XML Soap Envelope
+=======
+// authFIleparse()
+async function main_auth() {
+    const authentication_package = await authFIleparse()
+    console.log(authentication_package);
+}
+
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
 async function AuctionSoapEnv(SOAPENV, type) {
     return new Promise((resolve, reject) => {
         fs.readFile(SOAPENV, "utf-8", function (err, data) {
@@ -138,6 +173,7 @@ async function AuctionSoapEnv(SOAPENV, type) {
         });
     });
 }
+<<<<<<< HEAD
 // Request from SOAP Endpoint 
 async function AuctionRequest(Request_xml, type) {
     return new Promise(async (resolve, reject) => {
@@ -464,3 +500,25 @@ async function Auction_Refunds() {
 OrderAucion_parse() 
 var end = window.performance.now();
 console.log(`Execution time: ${end - start} ms`);
+=======
+async function AuctionRequest(Request_xml, type) {
+    // ALL THIS CAN BE CONDENCED DOWN TO ONE XML FILE A FEW KEYS NEED CHANGEING
+    const soap_data = await AuctionSoapEnv(Request_xml, type)
+    console.log('Request Envelope Ready');
+    // ALL That needs to be done is to change headers to pull from config and thats it
+    // Long Issue over GUID cuz me no smart sometimes and brain != workin
+    const USER_Headers = {
+        headers: {'User-Agent': USER_AGENT,
+        'Content-Type': SOAP_Header_CONTENT_TYPE['Auction_Content_Type'],'Host': SOAP_Header_Host_Config['Books_Host'], "Content-Length":SOAP_Content_len['Auctions_Report_Content_Len'], 
+        "Expect": "100-continue", "Connection": "Keep-Alive"}
+    }
+    axios.post(url_auctions, soap_data, USER_Headers).then(response => {
+            console.log(response);
+     })
+}
+
+AuctionRequest(Request_Auction_Order, 'Orders') //// Request_Auction_Inv, 'Inventory'
+async function Aucion_parse() {
+    
+}
+>>>>>>> 24f68e75d20dfc88b5c6986f37e9a1b2872592b2
