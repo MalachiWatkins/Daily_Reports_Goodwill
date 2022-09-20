@@ -17,6 +17,13 @@ import {
 } from 'module';
 const require = createRequire(
     import.meta.url);
+const { Pool } = require('pg');
+const pool = new Pool({
+    user: 'reports',
+    database: 'reports',
+    port: 5432,
+    host: '',
+  })
 const axios = require('axios-https-proxy-fix');
 const soapRequest = require('easy-soap-request');
 var fs = require('fs'),
@@ -214,46 +221,37 @@ async function OrderAucion_parse() {
             orderItemStatusID: [ '3' ],
             orderItemStatus: [ 'Awaiting Pickup' ]
           }
+        // const res = await pool.query("SELECT sku FROM orders");
+        // console.log(res.rows[0]);
+        // const res = await pool.query("SELECT count(sku) FROM orders")
+        // console.log(res.rows);
         var x = 0 
         while (x<orders.length) {
-            var single_order_status = orders[x]['orderItemStatus']
+            var single_order_status = orders[x]['orderItemStatus'] 
             if (typeof single_order_status !== 'undefined') {
-                if (single_order_status != 'Unpaid') {
-                  //  single_order_status == 'Paid' || single_order_status == 'Shipped' || single_order_status == 'Awaiting Pickup'
-                    if (orders[x]['auctionType']== 'SGW') {
-                        var source = orders[x]['Source']
-                        var sgw_dict = ORDER_REPORT['SGW']
-                        if (typeof sgw_dict[source] == 'undefined') { // Undef Means outlet store IDK WHY
-                            sgw_dict['Goodwill Outlet Store']['sub'].push(parseFloat(orders[x]['salesAmount'][0]))
-                            sgw_dict['Goodwill Outlet Store']['ship'].push(parseFloat(orders[x]['shippingEstimated'][0]))
-                        }else {
-                            sgw_dict[source]['sub'].push(parseFloat(orders[x]['salesAmount'][0]))
-                            sgw_dict[source]['ship'].push(parseFloat(orders[x]['shippingEstimated'][0]))
-                        }
-                    }else {
-                        var source = orders[x]['Source']
-                        var sgw_dict = ORDER_REPORT['Ebay']
-                        if (typeof sgw_dict[source] == 'undefined') { // Undef Means outlet store IDK WHY
-                            sgw_dict['Goodwill Outlet Store']['sub'].push(parseFloat(orders[x]['salesAmount'][0]))
-                            sgw_dict['Goodwill Outlet Store']['ship'].push(parseFloat(orders[x]['shippingEstimated'][0]))
-                        }else {
-                            sgw_dict[source]['sub'].push(parseFloat(orders[x]['salesAmount'][0]))
-                            sgw_dict[source]['ship'].push(parseFloat(orders[x]['shippingEstimated'][0]))
-                        }
+                if (single_order_status != 'Unpaid' || single_order_status != 'Canceled') {
+                    var date_paid_check = orders[x]['DatePaid']
+                    if (typeof date_paid_check != 'undefined') {
+                        var sku = orders[x]['Sku'][0]
+                        var source = orders[x]['Source'][0]
+                        var date_paid = date_paid_check[0]
+                        var auction_type = orders[x]['auctionType'][0]
+                        var sales_ammount = orders[x]['salesAmount'][0]
+                        var shipping = orders[x]['shippingEstimated'][0]
+                        // Below Makes sure that there are no Dupelicated orders when request is made
+                        try {
+                            const res = await pool.query(
+                            "INSERT INTO orders (sku, source, auction_type, date_paid, sales_ammount, shipping) VALUES ($1, $2, $3, $4, $5, $6)",
+                            [sku, source, auction_type, date_paid, sales_ammount, shipping]
+                          );
+                        } catch (error) {}
                     }
-                    
+
                 }
             }
-            x++
-            
+            x++        
         }
-
-
-
     });
-    
-
-
 }
 // parse auction Inventory response
 async function Auction_Inventory() {
@@ -278,7 +276,10 @@ async function Auction_Inventory() {
         }
         var x  = 0 
         while (x<inv.length) {
-            console.log(inv[x]);
+            if (inv[x]['itemStatus']=='Active' ) {
+                console.log(inv[x]);
+            }
+
             inv_report[inv[x]['itemStatus']].push(inv[x]['sku'])                     
             x++
         }
@@ -314,10 +315,16 @@ async function Auction_Activity() {
         }
         var x = 0
         while (x<Activity.length) {
-            var action = Activity[x]['action']
-            // console.log(action);
-            console.log(Activity[x]);
-            Action_dict[action].push(Activity[x]['username'][0])
+            var action = Activity[x]['action'][0]
+            var user_name = Activity[x]['username'][0]
+            var sku = Activity[x]['itemBarcode'][0]
+            //
+            try {
+                const res = await pool.query(
+                "INSERT INTO activity (sku, action, user_name ) VALUES ($1, $2, $3)",
+                [sku, action, user_name]
+              );
+            } catch (error) {}
             x++
             
         }
@@ -368,8 +375,21 @@ async function Auction_Refunds() {
 
 // });
 //Auction_Refunds()
-// Auction_Activity()
-// Auction_Inventory()
+Auction_Activity()
+//Auction_Inventory()
 OrderAucion_parse() 
 var end = window.performance.now();
 console.log(`Execution time: ${end - start} ms`);
+// So New system is gonna go sum like this
+// Everything Generated here is going to a postgres DB table 
+// then we are going to generate a report from the raw_db because some tags dont have names assoisated so i can find values by using the sku
+// to see who listed and give them credit in the report 
+// delete old report then add new one to 
+// after report is generated then delete original raw db table 
+// after report is generated copy to an Archive table of the report
+// run again
+
+
+// so technically to reduce exc time i could just put all orders in one dictionary then look though it when i got to generate
+// the report this should save alot of time and be more effecent plus saves on bandwith and seems like the optimal 
+// way to do all of this
