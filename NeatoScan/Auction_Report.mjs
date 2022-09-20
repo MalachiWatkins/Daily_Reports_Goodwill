@@ -22,7 +22,7 @@ const pool = new Pool({
     user: 'reports',
     database: 'reports',
     port: 5432,
-    host: '',
+    host: '10.118.0.133',
   })
 const axios = require('axios-https-proxy-fix');
 const soapRequest = require('easy-soap-request');
@@ -393,3 +393,6 @@ console.log(`Execution time: ${end - start} ms`);
 // so technically to reduce exc time i could just put all orders in one dictionary then look though it when i got to generate
 // the report this should save alot of time and be more effecent plus saves on bandwith and seems like the optimal 
 // way to do all of this
+
+// scratch the above comment because i need activity history to be farther back then the time set when generating or it 
+// wont be able to find the lister who put the items up for sale
