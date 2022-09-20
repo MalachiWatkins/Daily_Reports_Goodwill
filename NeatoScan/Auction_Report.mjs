@@ -22,7 +22,7 @@ const pool = new Pool({
     user: 'reports',
     database: 'reports',
     port: 5432,
-    host: '10.118.0.133',
+    host: '',
   })
 const axios = require('axios-https-proxy-fix');
 const soapRequest = require('easy-soap-request');
