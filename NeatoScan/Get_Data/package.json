@@ -4,6 +4,9 @@
     "axios-https-proxy-fix": "^0.17.1",
     "cheerio": "^1.0.0-rc.12",
     "easy-soap-request": "^4.8.0",
+    "mongodb": "^4.10.0",
+    "pg": "^8.8.0",
+    "vue": "^3.2.40",
     "xml-parse-from-string": "^1.0.1",
     "xml2json": "^0.12.0"
   },

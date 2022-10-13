@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css" />
+    <title>Goodwill Dashboard</title>
+
+  </head>
+  <body>
+
+    <header class="header">
+        <h1> <img
+                src="https://nmcdn.io/e186d21f8c7946a19faed23c3da2f0da/0a1af74792824776a4136ed802bdd432/images/logo.png"
+                alt="" style="padding-left:10px;width:250px;height:50px; background-color: inherit;">
+            Goodwill Report Dashboard {{ test1 }}</h1>
+    </header>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="center">
+                    <div class="test">
+                        <div class="float-container" style="padding:5px;">
+                            <div class="card" style="width: 25rem;">
+                                <div class="card-header">
+                                    Daily Sales
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Total: <strong id="total_sales_daily">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        SGW: <strong id="total_sales_sgw">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        eBay: <strong id="total_sales_ebay">Gathering</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p style="background-color: inherit; font-size: 150px;">&nbsp&nbsp</p>
+                            <!-- Shipping -->
+                            <div class="card" style="width: 25rem;">
+                                <div class="card-header">
+                                    Daily Shipping
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Unshipped: <strong id="unshipped">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Orders Shipped: <strong id="daily_orders_shipped">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Shipping Revenu: <strong id="daily_ship_rev">Gathering</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- -->
+                            <p style="background-color: inherit; font-size: 150px;">&nbsp&nbsp</p>
+                            <div class="card" style="width: 25rem;">
+                                <div class="card-header">
+                                    Inventory
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Total Active: <strong id="total_active_inv">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        SGW Active: <strong id="total_active_inv_sgw">Gathering</strong>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Ebay Active: <strong id="total_active_inv_ebay">Gathering</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="float-container" style="padding:5rem">
+                            <div class="card" style="width: 25rem;height: 10%;visibility: hidden;">
+                            </div>
+                            <div class="card" style="width: 25rem;height: 10%;">
+                                <div class="card-header">
+                                    Postings
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Daily Postings: <strong id="daily_postings">Gathering</strong>
+                                    </li>
+                                    <li class="list-group-item">Daily PPI: <strong id="daily_ppi">Gathering</strong></li>
+                                    <li class="list-group-item">Monthly PPI: <strong id="monthly_ppi">Gathering</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="center">
+                    <div class="test">
+                        <div class="jumbotron jumbotron-fluid" style="background-color: inherit;">
+                            <div class="container" style="background-color: inherit;">
+                                <h1 class="display-4">Comming Soon</h1>
+                                <p class="lead">User Section {{test1}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="center">
+                    <div class="test">
+                        <div class="jumbotron jumbotron-fluid" style="background-color: inherit;">
+                            <div class="container" style="background-color: inherit;">
+                                <h1 class="display-4">Todays Announcement</h1>
+                                <p class="lead">Announcement Board Coming Soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript">
+        var test1 = '11';
+
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+ <SCript>
+    const test = '111'
+function live() {
+        // This is where element IDs are set for easy control over live updates
+        // Sales
+        const daily_sales_total = document.getElementById('total_sales_daily')  
+        const daily_sales_ebay = document.getElementById('total_sales_ebay')
+        const daily_sales_sgw = document.getElementById('total_sales_sgw')
+        //
+        // Shipping
+        const unshipped = document.getElementById('unshipped') //
+        const daily_orders_shipped = document.getElementById('daily_orders_shipped')//
+        const daily_ship_rev = document.getElementById('daily_ship_rev')//
+        //
+        //Inv
+        const total_inventoy = document.getElementById('total_active_inv') //
+        const total_inventoy_sgw = document.getElementById('total_active_inv_sgw') //
+        const total_inventoy_ebay = document.getElementById('total_active_inv_ebay') //
+        //
+        // Posting Section
+        const daily_postings = document.getElementById('daily_postings')//
+        const daily_ppi = document.getElementById('daily_ppi')//
+        const monthly_ppi = document.getElementById('monthly_ppi')//
+        //
+        daily_sales_total.innerHTML += '<p>  </p>'
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://10.118.0.165:2000/data",
+                success: function (result) {
+                    result.forEach(document => {
+                        if (document['Report'] == 'unshipped') {
+                            unshipped.textContent = document['unshipped_total']
+                        } else if (document['Report'] == 'inv') {
+                            total_inventoy.textContent = document['Active_Inv']['SGW'][0] + document['Active_Inv']['eBay'][0]
+                            total_inventoy_sgw.textContent = document['Active_Inv']['SGW'][0]
+                            total_inventoy_ebay.textContent = document['Active_Inv']['eBay'][0]
+                        } else if (document['Report'] == 'orders') {
+                            if (document['Date_Type'] == 'Daily') {
+                                daily_sales_total.textContent = document['Total_sales'].toFixed(2)
+                                daily_sales_ebay.textContent = document['Ebay_Sales']
+                                daily_sales_sgw.textContent = document['SGW_Sales']
+                                daily_ppi.textContent = document['PPI']
+                                daily_ship_rev.textContent = document['shipping']['Rev'][0]
+                            }else{
+                                monthly_ppi.textContent = document['PPI']
+                            }
+                        } else if (document['Report'] == 'action') {
+                            if (document['type'] == 'Daily') {
+                                daily_postings.textContent = document['Postings'][0]
+                                daily_orders_shipped.textContent = document['Orders_Shipped'][0]
+                            }
+                        }
+                    });                     
+                }
+            });
+        });
+
+}
+addEventListener('DOMContentLoaded', () => {
+    live()
+    //setInterval(live, 30000)
+
+});
+// setInterval(live, 200)
+ </SCript>
+
+ </body>
+</html>

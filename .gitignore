@@ -1,7 +1,8 @@
 # Logs
-UPRIGHT LABS/
+UPRIGHT LABS(depreciated)/
+NeatoScan/Dashboard_Site/api_site/db/
 Resources/
-NeatoScan/config.js
+NeatoScan/Get_Data/config.js
 logs
 *.log
 npm-debug.log*
