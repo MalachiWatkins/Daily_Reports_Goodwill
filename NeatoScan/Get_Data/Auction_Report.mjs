@@ -14,7 +14,9 @@ import {
     MTD_Start,
     MTD_END,
     Neat_start_day,
-    uri
+    uri,
+    yesterday_start,
+    yesterday_end,
 } from './config.js';
 import {
     createRequire
@@ -780,6 +782,10 @@ async function Auction_Refunds(start, end) {
 async function run() {
         let order_daily = await OrderAucion_parse(daily_start, daily_end, 'Daily')
         let activity_daily = await Auction_Activity(daily_start, daily_end, 'Daily')
+
+        let order_yesterday = await OrderAucion_parse(yesterday_start, yesterday_end, 'Yesterday')
+        let activity_yesterday = await Auction_Activity(yesterday_start, yesterday_end, 'Yesterday')
+
 }
 
 async function monthly() {

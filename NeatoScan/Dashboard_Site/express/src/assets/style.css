@@ -71,6 +71,11 @@ body {
     padding-left: 500px;
     color: white;
   }
+  .user_container {
+    background-color: white;
+    top: 0;
+    left: 0;
+  }
   @media only screen and (max-width: 2000px) {
     body {
         transform: scale(1);
