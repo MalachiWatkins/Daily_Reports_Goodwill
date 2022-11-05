@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css" />
+  <title>Goodwill Dashboard</title>
+
+</head>
+
+<body>
+
+  <header class="header">
+    <h1> <img src="https://nmcdn.io/e186d21f8c7946a19faed23c3da2f0da/0a1af74792824776a4136ed802bdd432/images/logo.png"
+        alt="" style="padding-left:10px;width:250px;height:50px; background-color: inherit;">
+      Goodwill Report Dashboard</h1>
+  </header>
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="15000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="center">
+          <div class="test">
+            <div class="float-container" style="padding:5px;padding-top: 150px;">
+              <div class="card" style="width: 25rem;">
+                <div class="card-header">
+                  Daily Sales
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Total: <strong id="total_sales_daily">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    SGW: <strong id="total_sales_sgw">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    eBay: <strong id="total_sales_ebay">Gathering</strong>
+                  </li>
+                </ul>
+              </div>
+              <p style="background-color: inherit; font-size: 150px;">&nbsp&nbsp</p>
+              <!-- Shipping -->
+              <div class="card" style="width: 25rem;">
+                <div class="card-header">
+                  Daily Shipping
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Unshipped: <strong id="unshipped">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Orders Shipped: <strong id="daily_orders_shipped">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Shipping Revenu: <strong id="daily_ship_rev">Gathering</strong>
+                  </li>
+                </ul>
+              </div>
+              <!-- -->
+              <p style="background-color: inherit; font-size: 150px;">&nbsp&nbsp</p>
+              <div class="card" style="width: 25rem;">
+                <div class="card-header">
+                  Inventory
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Total Active: <strong id="total_active_inv">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    SGW Active: <strong id="total_active_inv_sgw">Gathering</strong>
+                  </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Ebay Active: <strong id="total_active_inv_ebay">Gathering</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="float-container" style="padding:5rem">
+              <div class="card" style="width: 25rem;height: 10%;visibility: hidden;">
+              </div>
+              <div class="card" style="width: 25rem;height: 10%;">
+                <div class="card-header">
+                  Postings
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    Daily Postings: <strong id="daily_postings">Gathering</strong>
+                  </li>
+                  <li class="list-group-item">Daily PPI: <strong id="daily_ppi">Gathering</strong>
+                  </li>
+                  <li class="list-group-item">Monthly PPI: <strong id="monthly_ppi">Gathering</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="user-cont">
+          <div class="test">
+            <div class="float-container-user">
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Shipped</th>
+                    <th scope="col">Sorted</th>
+                    <th scope="col">Listed</th>
+                    <th scope="col">Photographed</th>
+                    <th scope="col">Shelved</th>
+                    <th scope="col">Picked</th>
+                    <th scope="col">Packed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">gwmokan</th>
+                    <td id="gwmokanShipped">0</td>
+                    <td id="gwmokanSorted">0</td>
+                    <td id="gwmokanListed">0</td>
+                    <td id="gwmokanPhotographed">0</td>
+                    <td id="gwmokanShelved">0</td>
+                    <td id="gwmokanPicked">0</td>
+                    <td id="gwmokanPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Oliver</th>
+                    <td id="oliverShipped">0</td>
+                    <td id="oliverSorted">0</td>
+                    <td id="oliverListed">0</td>
+                    <td id="oliverPhotographed">0</td>
+                    <td id="oliverShelved">0</td>
+                    <td id="oliverPicked">0</td>
+                    <td id="oliverPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Benjamin</th>
+                    <td id="benjaminShipped">0</td>
+                    <td id="benjaminSorted">0</td>
+                    <td id="benjaminListed">0</td>
+                    <td id="benjaminPhotographed">0</td>
+                    <td id="benjaminShelved">0</td>
+                    <td id="benjaminPicked">0</td>
+                    <td id="benjaminPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Mark</th>
+                    <td id="markShipped">0</td>
+                    <td id="markSorted">0</td>
+                    <td id="markListed">0</td>
+                    <td id="markPhotographed">0</td>
+                    <td id="markShelved">0</td>
+                    <td id="markPicked">0</td>
+                    <td id="markPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Breanna</th>
+                    <td id="breannaShipped">0</td>
+                    <td id="breannaSorted">0</td>
+                    <td id="breannaListed">0</td>
+                    <td id="breannaPhotographed">0</td>
+                    <td id="breannaShelved">0</td>
+                    <td id="breannaPicked">0</td>
+                    <td id="breannaPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">James</th>
+                    <td id="jamesShipped">0</td>
+                    <td id="jamesSorted">0</td>
+                    <td id="jamesListed">0</td>
+                    <td id="jamesPhotographed">0</td>
+                    <td id="jamesShelved">0</td>
+                    <td id="jamesPicked">0</td>
+                    <td id="jamesPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ladonna</th>
+                    <td id="ladonnaShipped">0</td>
+                    <td id="ladonnaSorted">0</td>
+                    <td id="ladonnaListed">0</td>
+                    <td id="ladonnaPhotographed">0</td>
+                    <td id="ladonnaShelved">0</td>
+                    <td id="ladonnaPicked">0</td>
+                    <td id="ladonnaPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Emily</th>
+                    <td id="emilyShipped">0</td>
+                    <td id="emilySorted">0</td>
+                    <td id="emilyListed">0</td>
+                    <td id="emilyPhotographed">0</td>
+                    <td id="emilyShelved">0</td>
+                    <td id="emilyPicked">0</td>
+                    <td id="emilyPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Jilian</th>
+                    <td id="jilianShipped">0</td>
+                    <td id="jilianSorted">0</td>
+                    <td id="jilianListed">0</td>
+                    <td id="jilianPhotographed">0</td>
+                    <td id="jilianShelved">0</td>
+                    <td id="jilianPicked">0</td>
+                    <td id="jilianPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Kaitlyn</th>
+                    <td id="kaitlynShipped">0</td>
+                    <td id="kaitlynSorted">0</td>
+                    <td id="kaitlynListed">0</td>
+                    <td id="kaitlynPhotographed">0</td>
+                    <td id="kaitlynShelved">0</td>
+                    <td id="kaitlynPicked">0</td>
+                    <td id="kaitlynPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Jenni</th>
+                    <td id="jenniShipped">0</td>
+                    <td id="jenniSorted">0</td>
+                    <td id="jenniListed">0</td>
+                    <td id="jenniPhotographed">0</td>
+                    <td id="jenniShelved">0</td>
+                    <td id="jenniPicked">0</td>
+                    <td id="jenniPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Chandler</th>
+                    <td id="chandlerShipped">0</td>
+                    <td id="chandlerSorted">0</td>
+                    <td id="chandlerListed">0</td>
+                    <td id="chandlerPhotographed">0</td>
+                    <td id="chandlerShelved">0</td>
+                    <td id="chandlerPicked">0</td>
+                    <td id="chandlerPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Robert</th>
+                    <td id="robertShipped">0</td>
+                    <td id="robertSorted">0</td>
+                    <td id="robertListed">0</td>
+                    <td id="robertPhotographed">0</td>
+                    <td id="robertShelved">0</td>
+                    <td id="robertPicked">0</td>
+                    <td id="robertPacked">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="carousel-item">
+        <div class="user-cont">
+          <div class="test">
+            <div class="float-container-user">
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Shipped</th>
+                    <th scope="col">Sorted</th>
+                    <th scope="col">Listed</th>
+                    <th scope="col">Photographed</th>
+                    <th scope="col">Shelved</th>
+                    <th scope="col">Picked</th>
+                    <th scope="col">Packed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Chad</th>
+                    <td id="chadShipped">0</td>
+                    <td id="chadSorted">0</td>
+                    <td id="chadListed">0</td>
+                    <td id="chadPhotographed">0</td>
+                    <td id="chadShelved">0</td>
+                    <td id="chadPicked">0</td>
+                    <td id="chadPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Paul</th>
+                    <td id="paulShipped">0</td>
+                    <td id="paulSorted">0</td>
+                    <td id="paulListed">0</td>
+                    <td id="paulPhotographed">0</td>
+                    <td id="paulShelved">0</td>
+                    <td id="paulPicked">0</td>
+                    <td id="paulPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ben</th>
+                    <td id="benShipped">0</td>
+                    <td id="benSorted">0</td>
+                    <td id="benListed">0</td>
+                    <td id="benPhotographed">0</td>
+                    <td id="benShelved">0</td>
+                    <td id="benPicked">0</td>
+                    <td id="benPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Lanny</th>
+                    <td id="lannyShipped">0</td>
+                    <td id="lannySorted">0</td>
+                    <td id="lannyListed">0</td>
+                    <td id="lannyPhotographed">0</td>
+                    <td id="lannyShelved">0</td>
+                    <td id="lannyPicked">0</td>
+                    <td id="lannyPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Renae</th>
+                    <td id="renaeShipped">0</td>
+                    <td id="renaeSorted">0</td>
+                    <td id="renaeListed">0</td>
+                    <td id="renaePhotographed">0</td>
+                    <td id="renaeShelved">0</td>
+                    <td id="renaePicked">0</td>
+                    <td id="renaePacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Joshua</th>
+                    <td id="joshuaShipped">0</td>
+                    <td id="joshuaSorted">0</td>
+                    <td id="joshuaListed">0</td>
+                    <td id="joshuaPhotographed">0</td>
+                    <td id="joshuaShelved">0</td>
+                    <td id="joshuaPicked">0</td>
+                    <td id="joshuaPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Dianne</th>
+                    <td id="dianneShipped">0</td>
+                    <td id="dianneSorted">0</td>
+                    <td id="dianneListed">0</td>
+                    <td id="diannePhotographed">0</td>
+                    <td id="dianneShelved">0</td>
+                    <td id="diannePicked">0</td>
+                    <td id="diannePacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Kristen</th>
+                    <td id="kristenShipped">0</td>
+                    <td id="kristenSorted">0</td>
+                    <td id="kristenListed">0</td>
+                    <td id="kristenPhotographed">0</td>
+                    <td id="kristenShelved">0</td>
+                    <td id="kristenPicked">0</td>
+                    <td id="kristenPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Sarah</th>
+                    <td id="sarahShipped">0</td>
+                    <td id="sarahSorted">0</td>
+                    <td id="sarahListed">0</td>
+                    <td id="sarahPhotographed">0</td>
+                    <td id="sarahShelved">0</td>
+                    <td id="sarahPicked">0</td>
+                    <td id="sarahPacked">0</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Regina</th>
+                    <td id="reginaShipped">0</td>
+                    <td id="reginaSorted">0</td>
+                    <td id="reginaListed">0</td>
+                    <td id="reginaPhotographed">0</td>
+                    <td id="reginaShelved">0</td>
+                    <td id="reginaPicked">0</td>
+                    <td id="reginaPacked">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="center">
+          <div class="test">
+            <div class="jumbotron jumbotron-fluid" style="background-color: inherit; font-size: 50px;">
+              <div class="container" style="background-color: inherit; color: white;">
+                <h1 class="display-4">Daily Statistics Version 0.1</h1>
+                <p class="lead">Announcement Board Coming Soon</p>
+                <p class="lead">Monthly Stats Coming Soon</p>
+                <p class="lead">This is a testing phases and does not reflect final product :) </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+  <Script>
+    function live() {
+      // This is where element IDs are set for easy control over live updates
+      // Sales
+      const daily_sales_total = document.getElementById('total_sales_daily')
+      const daily_sales_ebay = document.getElementById('total_sales_ebay')
+      const daily_sales_sgw = document.getElementById('total_sales_sgw')
+      //
+      // Shipping
+      const unshipped = document.getElementById('unshipped') //
+      const daily_orders_shipped = document.getElementById('daily_orders_shipped') //
+      const daily_ship_rev = document.getElementById('daily_ship_rev') //
+      //
+      //Inv
+      const total_inventoy = document.getElementById('total_active_inv') //
+      const total_inventoy_sgw = document.getElementById('total_active_inv_sgw') //
+      const total_inventoy_ebay = document.getElementById('total_active_inv_ebay') //
+      //
+      // Posting Section
+      const daily_postings = document.getElementById('daily_postings') //
+      const daily_ppi = document.getElementById('daily_ppi') //
+      const monthly_ppi = document.getElementById('monthly_ppi') //
+      //
+      // User Section 
+      async function user_update(elem_id, data) {
+        await new Promise(r => setTimeout(r, 2000));
+        const table_user_fill = document.getElementById(elem_id)
+        table_user_fill.textContent = data
+      }
+      //
+      // Monthly Section   
+      const total_sales_monthly = document.getElementById('total_sales_monthly') //
+      const total_sales_sgw_monthly = document.getElementById('total_sales_sgw_monthly') //
+      const total_sales_ebay_monthly = document.getElementById('total_sales_ebay_monthly') //
+
+      const unshipped_monthly = document.getElementById('unshipped_monthly') // 
+      const monthly_orders_shipped = document.getElementById('monthly_orders_shipped') //
+      const monthly_ship_rev = document.getElementById('monthly_ship_rev') //
+      const monthly_postings = document.getElementById('monthly_postings') //
+      const monthly_ppi_2 = document.getElementById('monthly_ppi_2') //
+      const monthly_ppL = document.getElementById('monthly_ppL') //
+      //                
+      $(document).ready(function () {
+        $.ajax({
+          url: "http://10.118.0.165:2000/data",
+          success: function (result) {
+            result.forEach(document => {
+              if (document['Report'] == 'unshipped') {
+                unshipped.textContent = document['unshipped_total']
+                // unshipped_monthly.textContent = document['unshipped_total']
+              } else if (document['Report'] == 'inv') {
+                total_inventoy.textContent = document['Active_Inv']['SGW'][0] + document['Active_Inv'][
+                  'eBay'
+                ][0]
+                total_inventoy_sgw.textContent = document['Active_Inv']['SGW'][0]
+                total_inventoy_ebay.textContent = document['Active_Inv']['eBay'][0]
+              } else if (document['Report'] == 'orders') {
+                if (document['Date_Type'] == 'Daily') {
+                  daily_sales_total.textContent = document['Total_sales'].toFixed(2)
+                  daily_sales_ebay.textContent = document['Ebay_Sales']
+                  daily_sales_sgw.textContent = document['SGW_Sales']
+                  daily_ppi.textContent = document['PPI']
+                  daily_ship_rev.textContent = document['shipping']['Rev'][0]
+                } else {
+                  // monthly_ship_rev.textContent = document['shipping']['Rev'][0]
+                  // total_sales_monthly.textContent = document['Total_sales'].toFixed(2)
+                  // total_sales_sgw_monthly.textContent = document['SGW_Sales']
+                  // total_sales_ebay_monthly.textContent = document['Ebay_Sales']
+                  // monthly_ppi_2.textContent = document['PPI']
+                  monthly_ppi.textContent = document['PPI']
+                }
+              } else if (document['Report'] == 'action') {
+                if (document['type'] == 'Daily') {
+                  daily_postings.textContent = document['Postings'][0]
+                  daily_orders_shipped.textContent = document['Orders_Shipped'][0]
+                  for (const [key, value] of Object.entries(document['User_Action'])) {
+                    // Each key gives me the name of the user and each value is another object that have the actions
+                    var user = key
+                    var user_actions = value
+
+                    for (const value1 in user_actions) {
+                      // value 1 is action
+                      var ele_id = user + value1
+                      const user_arr = ['gwmokan', 'oliver', 'paul', 'kaitlyn', 'joshua', 'breanna',
+                        'lanny', 'jenni', 'shanon', 'dianne', 'ladonna', 'jilian', 'ben', 'emily',
+                        'benjamin', 'chandler', 'renae', 'mark'
+                      ]
+                      if (user_arr.includes(user)) { // MUST FILTER ANYTHING NOT IN THE LIST
+                        if (value1 == 'Shipped' || value1 == 'Sorted' || value1 == 'Listed' || value1 ==
+                          'Photographed' || value1 == 'Shelved' || value1 == 'Picked' || value1 ==
+                          'Packed') {
+
+                          user_update(ele_id, user_actions[value1]) //markShipped
+                        }
+
+                      }
+
+                    }
+                  }
+                }
+                // else {
+                //   monthly_postings.textContent = document['Postings'][0]
+                //   monthly_orders_shipped.textContent = document['Orders_Shipped'][0]
+                //   monthly_ppL.textContent = document['PPL'][0]
+                // }
+              }
+            });
+          }
+        });
+      });
+
+    }
+    addEventListener('DOMContentLoaded', () => {
+      live()
+      setInterval(live, 180000)
+    });
+    // setInterval(live, 200)
+  </SCript>
+
+</body>
+
+</html>

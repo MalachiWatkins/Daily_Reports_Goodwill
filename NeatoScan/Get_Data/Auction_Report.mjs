@@ -798,6 +798,5 @@ async function monthly() {
     let activity_log = await auction_activity_log(Neat_start_day, daily_end)
 }
 
-// setInterval(run, 300000)
-// setInterval(monthly, 1800000); // 30 mins
-monthly()
+setInterval(run, 300000)
+setInterval(monthly, 1800000); // 30 mins
