@@ -116,6 +116,16 @@ async function getReport_id(xml_file) {
                     get_status(xml_file)
                 } else {
                     console.log(resp['URL']);
+                                        // const curl_url = exec('curl ' + resp['URL'][0] + ' --output order_rept.zip')
+                    // async function decompress_zip() {
+                    //     await new Promise(r => setTimeout(r, 2000));
+                    //     decompress('order_rept.zip', "report").then(files => {
+                            
+                    //     });
+                    // }
+                    // const a = await decompress_zip()
+                    // const pythonProcess = spawn('python3',["/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/book_orders.py"]);
+
                 }
             }
         });
