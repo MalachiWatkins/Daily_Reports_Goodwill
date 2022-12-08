@@ -51,20 +51,25 @@ const {
     MongoClient
 } = require('mongodb');
 // XML File Locations Put this in config file
-var Request_Auction_Order = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Auction_order.xml'
-//'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/Auction_order.xml'
-var Request_Auction_Inv = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_inventory.xml'
-//'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_inventory.xml'
-var Authenticate_xml = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_auth.xml'
-//'/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/auction_auth.xml'
-var Request_Auction_Activity = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_activity.xml'
-var Request_Auction_Container_details = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_container_details.xml'
-var Request_Auction_Refunds = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/Get_Data/auction_refunds.xml'
+var Request_Auction_Order = '/home/user/Get_Data/xml_files/Auction_order.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Auction_order.xml'
 
+var Request_Auction_Inv = '/home/user/Get_Data/xml_files/auction_inventory.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_inventory.xml'
 
+var Authenticate_xml = '/home/user/Get_Data/xml_files/auction_auth.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_auth.xml'
+
+var Request_Auction_Activity = '/home/user/Get_Data/xml_files/auction_activity.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_activity.xml'
+
+var Request_Auction_Container_details = '/home/user/Get_Data/xml_files/auction_container_details.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_container_details.xml'
+
+var Request_Auction_Refunds = '/home/user/Get_Data/xml_files/auction_refunds.xml'
+//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/Get_Data/auction_refunds.xml'
 
 const url_auctions = SOAP_urls['Auction_Url']; // Main Book URL
-
 
 // Auth Function
 async function AuctionreqAuth(url, xml, CL, type) {
@@ -161,6 +166,8 @@ async function AuctionSoapEnv(SOAPENV, type, start, end) {
 async function AuctionRequest(Request_xml, type, start, end) {
     return new Promise(async (resolve, reject) => {
         // ALL THIS CAN BE CONDENCED DOWN TO ONE XML FILE A FEW KEYS NEED CHANGEING
+        console.log(start)
+        console.log(end)
         const soap_data = await AuctionSoapEnv(Request_xml, type, start, end)
         console.log('Request Envelope Ready');
         // ALL That needs to be done is to change headers to pull from config and thats it
@@ -372,7 +379,7 @@ async function OrderAucion_parse(start, end, type) {
             'SGW_Sales': parseFloat(total_subtotal['SGW'][0]),
             'Ebay_Sales': parseFloat(total_subtotal['eBay'][0]),
             'PPI': ppi.toFixed(2),
-            'Total_sales': total_subtotal_total,
+            'Total_sales': 1, //total_subtotal_total
             'Total_orders': total_orders[0][0],
             'shipping': shipping,
         }
@@ -385,6 +392,7 @@ async function OrderAucion_parse(start, end, type) {
         const cli_db = cli.db('reports')
         const cli_coll = cli_db.collection('report')
         var delete_doc = await cli_coll.deleteOne(delquery);
+        console.log("incert");
         var insert = await cli_coll.insertOne(doc);
         var close = await client.close()
         // client.connect(async err => {
@@ -502,8 +510,11 @@ async function Auction_Inventory(start, end) { // This Needs from start of time 
                 active_inv[inv[x]['auctionType'][0]] = [new_market_sum]
             }
             // if itemStatus is active then look for auctionType
-            let new_total = inv_report[inv[x]['itemStatus']][0] + 1
-            inv_report[inv[x]['itemStatus']] = [new_total]
+            if (typeof inv_report[inv[x]['itemStatus']] != 'undefined') {
+                let new_total = inv_report[inv[x]['itemStatus']][0] + 1
+                inv_report[inv[x]['itemStatus']] = [new_total]
+            }
+
             // inv_report[inv[x]['itemStatus']].push(inv[x]['sku'])                     
             x++
         }
@@ -519,8 +530,10 @@ async function Auction_Inventory(start, end) { // This Needs from start of time 
             const delquery = {
                 'Report': 'inv'
             }
+            
             var delete_doc = await collection.deleteOne(delquery);
             var insert = await collection.insertOne(doc);
+            console.log('done');
             client.close();
         });
     });
@@ -637,6 +650,9 @@ async function Auction_Activity(start, end, type) {
             'Packed': [0],
             'Refunded': [0],
             'Approved': [0],
+            'InitialListing': [0],
+            'Retired': [0],
+            'PickedUp':[0],
         }
         var user_action = {}
         var x = 0
@@ -653,7 +669,7 @@ async function Auction_Activity(start, end, type) {
             } catch (error) {
                 console.log(action);
             }
-            var add = Action_dict[action][0] + 1
+
             Action_dict[action] = [add]
             var user_name = user_name_raw.toString().toLowerCase()
             // User Activity Log
@@ -780,23 +796,25 @@ async function Auction_Refunds(start, end) {
 //    Neat_start_day and daily start is start of neatoscan this is only for activity and inventory
 
 async function run() {
-        let order_daily = await OrderAucion_parse(daily_start, daily_end, 'Daily')
-        let activity_daily = await Auction_Activity(daily_start, daily_end, 'Daily')
-
+    let order_daily = await OrderAucion_parse(daily_start, daily_end, 'Daily')
+    let activity_daily = await Auction_Activity(daily_start, daily_end, 'Daily')
+    if (daily_start != "01") {
         let order_yesterday = await OrderAucion_parse(yesterday_start, yesterday_end, 'Yesterday')
         let activity_yesterday = await Auction_Activity(yesterday_start, yesterday_end, 'Yesterday')
-
+    }
 }
-
 async function monthly() {
+    // We need to test this section on the start of the month idk if there is an issue with them yet
     let order_monthly = await OrderAucion_parse(MTD_Start, MTD_END, 'Monthly')
     let unshipped_test = await unshipped()
     let mtd_parc_store = await store_PAR(MTD_Start, daily_end)
     let activity_monthly = await Auction_Activity(MTD_Start, MTD_END, 'Monthly')
-    //let refunds_monthly = await Auction_Refunds(MTD_Start, MTD_END) broken needs fix
+    //let refunds_monthly = await Auction_Refunds(MTD_Start, MTD_END) broken needs fix # If no refunds return it breaks so we need an edge case for that too
     let inventory = await Auction_Inventory(Neat_start_day, daily_end)
     let activity_log = await auction_activity_log(Neat_start_day, daily_end)
 }
 
 setInterval(run, 300000)
 setInterval(monthly, 1800000); // 30 mins
+
+// Put a rate limit on here and re work timing with the new server. work on a reset at a certian time everyday 

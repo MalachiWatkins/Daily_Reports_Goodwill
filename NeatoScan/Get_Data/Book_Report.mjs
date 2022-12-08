@@ -1,14 +1,22 @@
 import {
     Client_User_Name,
     Token,
-    start_date_time,
-    end_date_time,
     SOAP_Header_CONTENT_TYPE,
     SOAP_Header_Host_Config,
     USER_AGENT,
     SOAP_actions,
     SOAP_Content_len,
-    SOAP_urls
+    SOAP_urls,
+    NIM_User,
+    NIM_Password,
+    daily_start,
+    daily_end,
+    MTD_Start,
+    MTD_END,
+    Neat_start_day,
+    uri,
+    yesterday_start,
+    yesterday_end,
 } from './config.js';
 import {
     createRequire
@@ -20,20 +28,39 @@ const soapRequest = require('easy-soap-request');
 var fs = require('fs'),
     parseString = require("xml2js").parseString,
     xml2js = require("xml2js");
-
-// XML File Locations Put this in config file
-var Request_Book_Order_report_XML = '/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/Request_Book_Order_Report.xml'
-var Report_Status_Books_XML = '/home/malachi/Desktop/Projects/Daily_Reports_Goodwill/NeatoScan/xml_files/Request_Report_Status.xml'
-
+const { spawn } = require('child_process');
+const { exec } = require('child_process');
+const decompress = require("decompress");
+// XML File Locatioconst { spawn } = require('child_process');
+var Request_Book_Order_report_XML = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Request_Book_Order_Report.xml'
+var Report_Status_Books_XML = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Request_Report_Status.xml'
+var Report_book_listings = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/book_listings.xml'
 const url_books = SOAP_urls['Books_Url']; // Main Book URL
 
-//
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-  } 
+// Builds Request file
+async function build_request_file(request_xml, type, start_date, end_date) {
+    return new Promise((resolve, reject) => {
+    fs.readFile(request_xml, "utf-8", function (err, data) { // Request_Book_Order_report_XML is xml file
+        parseString(data, function (err, result) {
+
+                var json = result;
+                var auth_filter = json['soap:Envelope']['soap:Body'][0][type][0]; // RequestOrdersReport is type
+                var auth_Client_User = auth_filter['username'] = Client_User_Name;
+                var auth_token = auth_filter['token'] = Token;
+                var date_start_filter = auth_filter['startDate'] = start_date;
+                var date_end_filter = auth_filter['endDate'] = end_date;
+                var builder = new xml2js.Builder();
+                const xml = builder.buildObject(json);
+                resolve(xml)
+            
+        });
+    });
+});
+}
+
 
 // Request Function
-function req(url, xml, SA, CL, type) {
+function req(url, xml, SA, CL, type, filter_type) {
     const USER_Headers = {
         headers: {
             "User-Agent": USER_AGENT,
@@ -50,12 +77,12 @@ function req(url, xml, SA, CL, type) {
             parseString(response.data, async function (err, result) {
                 if (type == 'order_report' ) {
                     var json = result;
-                    var report_ID = json['soap:Envelope']['soap:Body'][0]['RequestOrdersReportResponse'][0]['RequestOrdersReportResult'][0]['reportID'];
+                    var report_ID = json['soap:Envelope']['soap:Body'][0][filter_type + 'Response'][0][filter_type + 'Result'][0]['reportID'];
                     console.log('Report Generating');
                     resolve(report_ID)
                 } else {
                     var json = result;
-                    var status = json['soap:Envelope']['soap:Body'][0]['RequestReportStatusResponse'][0]['RequestReportStatusResult'][0]['status'];
+                    var status = json['soap:Envelope']['soap:Body'][0][ 'RequestReportStatusResponse'][0]['RequestReportStatusResult'][0]['status'];
                     if (status == 'Done') {
                         var url = json['soap:Envelope']['soap:Body'][0]['RequestReportStatusResponse'][0]['RequestReportStatusResult'][0]['reportURL']
                         var resp_dict = {
@@ -74,27 +101,14 @@ function req(url, xml, SA, CL, type) {
                 }
             });
 
-        }).catch(err => {
-            console.log(err)
-        });
+        })
     });
 }
-fs.readFile(Request_Book_Order_report_XML, "utf-8", function (err, data) {
-    parseString(data, function (err, result) {
-        var json = result;
-        var auth_filter = json['soap:Envelope']['soap:Body'][0]['RequestOrdersReport'][0];
-        var auth_Client_User = auth_filter['username'] = Client_User_Name;
-        var auth_token = auth_filter['token'] = Token;
-        var date_start_filter = auth_filter['startDate'] = start_date_time;
-        var date_end_filter = auth_filter['endDate'] = end_date_time;
-        var builder = new xml2js.Builder();
-        const xml = builder.buildObject(json);
-        getReport_id(xml)
 
-    });
-});
-async function getReport_id(xml_file) {
-    const report_id = await req(url_books, xml_file, 'Book_Report_Request', 'Book_Report_Request_Content_Len', 'order_report')
+
+async function getReport_id() {
+    const req_xml = await build_request_file(Report_book_listings, 'RequestListingsReport' , daily_start, daily_end)
+    const report_id = await req(url_books, req_xml, 'Book_Listings', 'Book_Report_Request_Content_Len', 'order_report', 'RequestListingsReport')
     fs.readFile(Report_Status_Books_XML, "utf-8", function (err, data) {
         parseString(data, function (err, result) {
             var json = result;
@@ -105,7 +119,6 @@ async function getReport_id(xml_file) {
             var builder = new xml2js.Builder();
             const xml_file = builder.buildObject(json);
             get_status(xml_file)
-
             async function get_status(xml) {
                 const status = await req(url_books, xml, 'Request_Report_Status', 'Request_Report_Status_Content_Len', 'get_status')
                 stat(status)
@@ -116,8 +129,19 @@ async function getReport_id(xml_file) {
                     get_status(xml_file)
                 } else {
                     console.log(resp['URL']);
+                    // const curl_url = exec('curl ' + resp['URL'][0] + ' --output order_rept.zip')
+                    // async function decompress_zip() {
+                    //     await new Promise(r => setTimeout(r, 2000));
+                    //     decompress('order_rept.zip', "report").then(files => {
+                            
+                    //     });
+                    // }
+                    // const a = await decompress_zip()
+                    // const pythonProcess = spawn('python3',["/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/book_orders.py"]);
+
                 }
             }
         });
     });
 }
+getReport_id()
