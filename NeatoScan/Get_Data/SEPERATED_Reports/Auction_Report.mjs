@@ -30,10 +30,10 @@ const {
     Pool
 } = require('pg');
 const pool = new Pool({
-    user: 'reports',
-    database: 'reports',
-    port: 5432,
-    host: '10.118.0.133', // Local Ip Nice Try
+    user: '',
+    database: '',
+    port: 1,
+    host: '', // Local Ip Nice Try
 })
 const axios = require('axios-https-proxy-fix');
 const soapRequest = require('easy-soap-request');
@@ -51,24 +51,18 @@ const {
     MongoClient
 } = require('mongodb');
 // XML File Locations Put this in config file
-var Request_Auction_Order = '/home/user/Get_Data/xml_files/Auction_order.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Auction_order.xml'
-
-var Request_Auction_Inv = '/home/user/Get_Data/xml_files/auction_inventory.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_inventory.xml'
-
-var Authenticate_xml = '/home/user/Get_Data/xml_files/auction_auth.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_auth.xml'
-
-var Request_Auction_Activity = '/home/user/Get_Data/xml_files/auction_activity.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_activity.xml'
-
-var Request_Auction_Container_details = '/home/user/Get_Data/xml_files/auction_container_details.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_container_details.xml'
-
-var Request_Auction_Refunds = '/home/user/Get_Data/xml_files/auction_refunds.xml'
-//'/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/Get_Data/auction_refunds.xml'
-
+var Request_Auction_Order = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/Auction_order.xml'
+ //'/home/user/Get_Data/xml_files/Auction_order.xml'
+var Request_Auction_Inv = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_inventory.xml'
+ //'/home/user/Get_Data/xml_files/auction_inventory.xml'
+var Authenticate_xml = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_auth.xml'
+ //'/home/user/Get_Data/xml_files/auction_auth.xml'
+var Request_Auction_Activity = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_activity.xml'
+ //'/home/user/Get_Data/xml_files/auction_activity.xml'
+var Request_Auction_Container_details = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/Get_Data/xml_files/auction_container_details.xml'
+// '/home/user/Get_Data/xml_files/auction_container_details.xml'
+var Request_Auction_Refunds = '/Users/malachiwatkins/Desktop/work/Daily_Reports_Goodwill/NeatoScan/xml_files/Get_Data(working)/auction_refunds.xml'
+//'/home/user/Get_Data/xml_files/auction_refunds.xml'
 const url_auctions = SOAP_urls['Auction_Url']; // Main Book URL
 
 // Auth Function
@@ -372,14 +366,19 @@ async function OrderAucion_parse(start, end, type) {
 
         var total_subtotal_total = parseFloat(total_subtotal['SGW'][0]) + parseFloat(total_subtotal['eBay'][0])
         var ppi = total_subtotal_total / total_orders[0][0]
-
+        let store_doc = {
+            'Type': "Store",
+            'Date_Type': type,
+            'report' : store_report
+        }
+        const store_del = {"Type": 'Store', 'Date_Type': type}
         let doc = {
             'Report': 'orders',
             'Date_Type': type,
             'SGW_Sales': parseFloat(total_subtotal['SGW'][0]),
             'Ebay_Sales': parseFloat(total_subtotal['eBay'][0]),
             'PPI': ppi.toFixed(2),
-            'Total_sales': 1, //total_subtotal_total
+            'Total_sales': total_subtotal_total,
             'Total_orders': total_orders[0][0],
             'shipping': shipping,
         }
@@ -788,13 +787,6 @@ async function Auction_Refunds(start, end) {
 
 }
 
-// all these need a start, end
-//    daily_start,
-//    daily_end,
-//    MTD_Start,
-//    MTD_END,
-//    Neat_start_day and daily start is start of neatoscan this is only for activity and inventory
-
 async function run() {
     let order_daily = await OrderAucion_parse(daily_start, daily_end, 'Daily')
     let activity_daily = await Auction_Activity(daily_start, daily_end, 'Daily')
@@ -816,5 +808,4 @@ async function monthly() {
 
 setInterval(run, 300000)
 setInterval(monthly, 1800000); // 30 mins
-
 // Put a rate limit on here and re work timing with the new server. work on a reset at a certian time everyday 

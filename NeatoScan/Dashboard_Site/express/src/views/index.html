@@ -563,65 +563,46 @@
     <div class="carousel-item">
       <div class="center-m-b">
         <div class="float-container">
+          <div class="card" style="height: 10%;visibility: hidden;width: 13rem;">
+        </div>
           <div class="card" style="">
             <div class="card-header">
               Monthly Sales
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                Total: <strong id="total_sales_daily">Gathering</strong>
+                Total: <strong id="total_sales_monthly">Gathering</strong>
               </li>
             </ul>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                SGW: <strong id="total_sales_sgw">Gathering</strong>
+                SGW: <strong id="total_sales_sgw_monthly">Gathering</strong>
               </li>
             </ul>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                eBay: <strong id="total_sales_ebay">Gathering</strong>
-              </li>
-            </ul>
-          </div>
-          <p> &nbsp&nbsp&nbsp&nbsp&nbsp</p>
-          <div class="card" style="">
-            <div class="card-header">
-              Daily Shipping
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                Unshipped: <strong id="unshipped">Gathering</strong>
-              </li>
-            </ul>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                Orders Shipped: <strong id="daily_orders_shipped">Gathering</strong>
-              </li>
-            </ul>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                Shipping Revenu: <strong id="daily_ship_rev">Gathering</strong>
+                eBay: <strong id="total_sales_ebay_monthly">Gathering</strong>
               </li>
             </ul>
           </div>
           <p> &nbsp&nbsp&nbsp&nbsp&nbsp</p>
           <div class="card" style="">
             <div class="card-header">
-              Inventory
+              Monthly Shipping
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                Total Active: <strong id="total_active_inv">Gathering</strong>
+                Unshipped: <strong id="unshipped_monthly">Gathering</strong>
               </li>
             </ul>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                SGW Active: <strong id="total_active_inv_sgw">Gathering</strong>
+                Orders Shipped: <strong id="monthly_orders_shipped">Gathering</strong>
               </li>
             </ul>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                Ebay Active: <strong id="total_active_inv_ebay">Gathering</strong>
+                Shipping Revenu: <strong id="monthly_ship_rev">Gathering</strong>
               </li>
             </ul>
           </div>
@@ -632,11 +613,11 @@
               </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                  Daily Postings: <strong id="daily_postings">Gathering</strong>
+                  Monthly Postings: <strong id="monthly_postings">Gathering</strong>
                 </li>
-                <li class="list-group-item">Daily PPI: <strong id="daily_ppi">Gathering</strong>
+                <li class="list-group-item">Monthly PPL: <strong id="monthly_ppL">Gathering</strong>
                 </li>
-                <li class="list-group-item">Monthly PPI: <strong id="monthly_ppi">Gathering</strong>
+                <li class="list-group-item">Monthly PPI: <strong id="monthly_ppi_2">Gathering</strong>
                 </li>
               </ul>
           </div>
@@ -654,15 +635,15 @@
       <div class="announce">
         <div class="ann-cont">
           <div class="jumbotron">
-            <h1 class="display-4">Statistics Board v1.0!</h1>
-            <p class="lead">This is the offcial version 1.0 of the Statistics Board</p>
+            <h1 class="" id="msg_h1">Stat Board v1!!!</h1>
+            <p class="" id="msg_p1"></p>
+            <h1 class="" id="msg_h2"></h1>
+            <p id="msg_p2"></p>
             <hr class="my-4">
-            <p>All Components of this app were Developed By Malachi Watkins please contact me if any issues are observed</p>
+            <p style="font-size: 25px;">All Components of this app were Developed By Malachi Watkins please contact me if any issues are observed</p>
           </div>
         </div>
       </div>
-      <!-- <div style="top: 0; left: 0;" class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="light" data-type="VERTICAL" data-vanity="malachi-watkins-9411511a6" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/malachi-watkins-9411511a6?trk=profile-badge"></a></div>
-               -->
     </div>
   </div>
   <!-- Optional JavaScript -->
@@ -733,6 +714,11 @@ var myBarChart = new Chart(ctxB, {
       const daily_postings = document.getElementById('daily_postings') //
       const daily_ppi = document.getElementById('daily_ppi') //
       const monthly_ppi = document.getElementById('monthly_ppi') //
+
+      const h1 = document.getElementById('msg_h1') 
+      const h2 = document.getElementById('msg_h2')
+      const p1 = document.getElementById('msg_p1')
+      const p2 = document.getElementById('msg_p2')
       //
       // User Section 
       async function user_update(elem_id, data, type) {
@@ -743,13 +729,14 @@ var myBarChart = new Chart(ctxB, {
       }
       //
       // Monthly Section   
-      const total_sales_monthly = document.getElementById('total_sales_monthly') //
-      const total_sales_sgw_monthly = document.getElementById('total_sales_sgw_monthly') //
-      const total_sales_ebay_monthly = document.getElementById('total_sales_ebay_monthly') //
+      const total_sales_monthly = document.getElementById('total_sales_monthly')//
+      const total_sales_sgw_monthly = document.getElementById('total_sales_sgw_monthly')//
+      const total_sales_ebay_monthly = document.getElementById('total_sales_ebay_monthly')// 
 
-      const unshipped_monthly = document.getElementById('unshipped_monthly') // 
-      const monthly_orders_shipped = document.getElementById('monthly_orders_shipped') //
-      const monthly_ship_rev = document.getElementById('monthly_ship_rev') //
+      const unshipped_monthly = document.getElementById('unshipped_monthly')//
+      const monthly_orders_shipped = document.getElementById('monthly_orders_shipped')// 
+      const monthly_ship_rev = document.getElementById('monthly_ship_rev')//
+
       const monthly_postings = document.getElementById('monthly_postings') //
       const monthly_ppi_2 = document.getElementById('monthly_ppi_2') //
       const monthly_ppL = document.getElementById('monthly_ppL') //
@@ -757,12 +744,12 @@ var myBarChart = new Chart(ctxB, {
       //
       $(document).ready(function () {
         $.ajax({
-          url: "http://localhost:2000/data",
+          url: "http://3.145.105.87:2000/data",
           success: function (result) {
             result.forEach(document => {
               if (document['Report'] == 'unshipped') {
                 unshipped.textContent = document['unshipped_total']
-                // unshipped_monthly.textContent = document['unshipped_total']
+                unshipped_monthly.textContent = document['unshipped_total']
               } else if (document['Report'] == 'inv') {
                 total_inventoy.textContent = document['Active_Inv']['SGW'][0] + document['Active_Inv'][
                   'eBay'
@@ -779,7 +766,12 @@ var myBarChart = new Chart(ctxB, {
                 } else if (document['Date_Type'] == 'Yesterday') {
                   yesterday_sales.textContent = document['Total_sales'].toFixed(2)
                 } else {
+                  total_sales_monthly.textContent = document['Total_sales'].toFixed(2)
                   monthly_ppi.textContent = document['PPI']
+                  monthly_ppi_2.textContent = document['PPI']
+                  total_sales_ebay_monthly.textContent = document['Ebay_Sales']
+                  total_sales_sgw_monthly.textContent = document['SGW_Sales']
+                  monthly_ship_rev.textContent = document['shipping']['Rev'][0]
                 }
               } else if (document['Report'] == 'action') {
                 if (document['type'] == 'Daily') {
@@ -811,7 +803,16 @@ var myBarChart = new Chart(ctxB, {
 
                     }
                   }
-                }
+                }else if (document['type'] == 'Monthly'){
+                  monthly_postings.textContent = document['Postings'][0]
+                  monthly_orders_shipped.textContent = document['Orders_Shipped'][0]
+                  monthly_ppL.textContent = document['PPL']
+              }
+              } else if (document['Type'] == 'MSG') {
+                 h1.textContent = document['H1']
+                 h2.textContent = document['H2']
+                 p1.textContent = document['P1']
+                 p2.textContent = document['P2']
               }
             });
           }

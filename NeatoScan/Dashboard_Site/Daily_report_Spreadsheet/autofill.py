@@ -16,38 +16,47 @@ import requests
 
 def test():
       workbook = load_workbook(filename="Daily _Report.xlsx")
-      ecomm_perfom_sheet = workbook['Ecomm Performance']
+      ecomm_perfom_sheet = workbook['Ecomm Performance Funmi']
 
-      response = requests.get('')
+      response = requests.get('http://3.145.105.87:2000/data')
  
       res = response
 
       res_json = res.json()
       for x in res_json:
-        # x is documents in DB
-        if x['Report'] == "orders":
-          if x['Date_Type'] == "Daily":
-            ecomm_perfom_sheet["C4"] = "$" + str(round(x['Total_sales'], 2))
-            ecomm_perfom_sheet["C6"] = str(x['Total_orders'])
-            ecomm_perfom_sheet["C7"] = str(x['PPI'])
-            ecomm_perfom_sheet["C10"] = str(x['SGW_Sales'])
-            ecomm_perfom_sheet["C11"] = str(x['Ebay_Sales'])
-          elif x['Date_Type'] == "Monthly":
-            ecomm_perfom_sheet["F6"] = str(x['Total_sales']) # MTD Sales
-            ecomm_perfom_sheet["F7"] = str(x['Total_orders']) # MTD Items Sold
+        try:
+          if x['Report'] == "orders":
+            if x['Date_Type'] == "Yesterday":
+              ecomm_perfom_sheet["C4"] = "$" + str(round(x['Total_sales'], 2))
+              ecomm_perfom_sheet["C5"] = x['shipping']['Rev'][0]
+              ecomm_perfom_sheet["C7"] = str(x['Total_orders'])
+              ecomm_perfom_sheet["C8"] = x['PPI']
+              ecomm_perfom_sheet["C11"] = str(x['SGW_Sales'])
+              ecomm_perfom_sheet["C12"] = str(x['Ebay_Sales'])
+            elif x['Date_Type'] == "Monthly":
+              ecomm_perfom_sheet["F6"] = str(x['Total_sales']) # MTD Sales
+              ecomm_perfom_sheet["F7"] = x['shipping']['Rev'][0]
+              ecomm_perfom_sheet["F8"] = str(x['Total_orders']) # MTD Items Sold
+              ecomm_perfom_sheet["J5"] = x['PPI']
+          elif x['Report'] == "action":
+            if x['type'] == "Yesterday":
+              ecomm_perfom_sheet["C15"] = str(x['Postings'][0])
+              ecomm_perfom_sheet["C16"] = str(x['PPL'])
+              ecomm_perfom_sheet["C17"] = str(x['Orders_Shipped'][0])
+            elif x['type'] == 'Monthly':
+              ecomm_perfom_sheet["J4"] = str(x['Postings'][0])
+          elif x["Report"] == "inv":
+            ecomm_perfom_sheet["C20"] = str(x['Active_Inv']['SGW'][0]) # Active SGW Listings
+            ecomm_perfom_sheet["C21"] = str(x['Active_Inv']['eBay'][0]) # Active Ebay Listings
+            units_shelved = float(x['Active_Inv']['SGW'][0]) + float(x['Active_Inv']['eBay'][0])
+            ecomm_perfom_sheet["F13"] = str(units_shelved) # is just total active listings
+        except:
+          pass
 
-        elif x['Report'] == "action":
-          if x['type'] == "Daily":
-            ecomm_perfom_sheet["C14"] = str(x['Postings'][0])
-            avg_postings = float(x['Postings'][0]) / 5
-            ecomm_perfom_sheet["C15"] = str(round(avg_postings,2)) # this is just postings divided by 5
-            ecomm_perfom_sheet["C16"] = str(x['Orders_Shipped'][0])
 
-        elif x["Report"] == "inv":
-          ecomm_perfom_sheet["C19"] = str(x['Active_Inv']['SGW'][0]) # Active SGW Listings
-          ecomm_perfom_sheet["C20"] = str(x['Active_Inv']['eBay'][0]) # Active Ebay Listings
-          units_shelved = float(x['Active_Inv']['SGW'][0]) + float(x['Active_Inv']['eBay'][0])
-          ecomm_perfom_sheet["F12"] = str(units_shelved) # is just total active listings
       workbook.save(filename="Daily _Report.xlsx")
       return
 test()
+
+
+# sell throuh is items sold / items listed 

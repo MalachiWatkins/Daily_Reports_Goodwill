@@ -1,5 +1,5 @@
 body {
-     background-image: linear-gradient(124deg, #160077, #00006e, #000000, #000000, #000000, #000000, #000000, #00006e, #160077);
+     background-image: url("Polygon\ Luminary.svg");
     font-family: Serif;
     min-height: 100vh;
     transform: scale(1.5);
@@ -15,7 +15,6 @@ body {
 
   }
   .center-m-b {
-    -webkit-filter: blur(5px);
     width: 100%;
     color: black;
     padding-top: 5%;
@@ -61,6 +60,9 @@ body {
   }
   .card {
     width: 25rem;
+  }
+  .jumbotron {
+    font-size: 40px;
   }
   @media only screen and (min-width: 400px) {
     body {
