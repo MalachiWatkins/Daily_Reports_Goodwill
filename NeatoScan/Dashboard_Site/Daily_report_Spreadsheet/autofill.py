@@ -38,6 +38,7 @@ def test():
               ecomm_perfom_sheet["F8"] = str(x['Total_orders']) # MTD Items Sold
               monthly_total_orders.append(x['Total_orders'])
               ecomm_perfom_sheet["J5"] = x['PPI']
+              ecomm_perfom_sheet["J12"] = x['shipping']['Cost'][0]
           elif x['Report'] == "action":
             if x['type'] == "Yesterday":
               ecomm_perfom_sheet["C15"] = str(x['Postings'][0])
@@ -55,7 +56,7 @@ def test():
             ecomm_perfom_sheet["J7"] = round(x['refund_report']['Total_refunds'], 2) # Active SGW Listings
         except:
           pass
-      workbook.save(filename="Daily _Report.xlsx")
+      workbook.save(filename="Daily_Report.xlsx")
       return
 test()
 
